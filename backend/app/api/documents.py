@@ -14,6 +14,8 @@ from app.services.document_processor import extract_text_from_pdf
 from app.schemas.document_processing import DocumentProcessingResponse
 from app.services.document_extractor import get_extraction_schema
 from app.services.ai_extractor import AIExtractor
+from app.models.document_extraction import DocumentExtraction
+from app.schemas.document_extraction import DocumentExtractionResponse
 
 router = APIRouter(
     prefix="/api/documents",
@@ -212,33 +214,48 @@ def process_document(
             detail="Document file not found",
         )
 
-    # Step 1: Extract text from PDF
+    # Mark document as processing
+    document.status = "PROCESSING"
+    db.commit()
+
     try:
+        # Step 1: Extract text
+        # Step 1: Check whether the file type is supported
+        if document.mime_type != "application/pdf":
+            document.status = "FAILED"
+            db.commit()
+
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "OCR processing is not available yet. "
+                    "Only PDF documents with extractable text "
+                    "are currently supported."
+                ),
+            )
+
+        # Step 2: Extract text from PDF
         extracted_text = extract_text_from_pdf(
             document.file_path
         )
-    except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail="Failed to process document",
+        if not extracted_text:
+            document.status = "FAILED"
+            db.commit()
+
+            raise HTTPException(
+                status_code=422,
+                detail="No text could be extracted from document",
+            )
+
+        # Step 2: Select extraction schema
+        schema = get_extraction_schema(
+            document.document_type
         )
 
-    if not extracted_text:
-        raise HTTPException(
-            status_code=422,
-            detail="No text could be extracted from document",
-        )
+        structured_data = None
 
-    # Step 2: Select extraction schema
-    schema = get_extraction_schema(
-        document.document_type
-    )
-
-    # Step 3: Extract structured data using Gemini
-    structured_data = None
-
-    if schema is not None:
-        try:
+        # Step 3: AI extraction
+        if schema is not None:
             extractor = AIExtractor()
 
             structured_data = extractor.extract(
@@ -246,25 +263,115 @@ def process_document(
                 schema=schema,
             )
 
-        except ValueError as exc:
-            raise HTTPException(
-                status_code=500,
-                detail=str(exc),
+            extraction = DocumentExtraction(
+                document_id=document.id,
+                document_type=document.document_type,
+                extracted_data=structured_data.model_dump(),
+                extraction_status="COMPLETED",
+                model_name="gemini-2.5-flash",
             )
 
-        except Exception:
-            raise HTTPException(
-                status_code=500,
-                detail="AI document extraction failed",
-            )
+            db.add(extraction)
 
-    return {
-        "document_id": document.id,
-        "status": "PROCESSED",
-        "extracted_text": extracted_text,
-        "extracted_data": (
-            structured_data.model_dump()
-            if structured_data is not None
-            else None
-    ),
-}
+        # Mark processing as completed
+        document.status = "PROCESSED"
+
+        db.commit()
+
+        return {
+            "document_id": document.id,
+            "status": "PROCESSED",
+            "extracted_text": extracted_text,
+            "extracted_data": (
+                structured_data.model_dump()
+                if structured_data is not None
+                else None
+            ),
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as exc:
+        db.rollback()
+
+        document = (
+            db.query(BidDocument)
+            .filter(BidDocument.id == document_id)
+            .first()
+        )
+
+        if document:
+            document.status = "FAILED"
+            db.commit()
+
+        print(f"DOCUMENT PROCESSING ERROR: {type(exc).__name__}: {exc}")
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Document processing failed: {type(exc).__name__}: {exc}",
+        )
+
+@router.get(
+    "/{document_id}/extractions/latest",
+    response_model=DocumentExtractionResponse,
+)
+def get_latest_document_extraction(
+    document_id: int,
+    db: Session = Depends(get_db),
+):
+    document = (
+        db.query(BidDocument)
+        .filter(BidDocument.id == document_id)
+        .first()
+    )
+
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found",
+        )
+
+    extraction = (
+        db.query(DocumentExtraction)
+        .filter(DocumentExtraction.document_id == document_id)
+        .order_by(DocumentExtraction.created_at.desc())
+        .first()
+    )
+
+    if not extraction:
+        raise HTTPException(
+            status_code=404,
+            detail="No extraction found for this document",
+        )
+
+    return extraction
+
+@router.get(
+    "/{document_id}/extractions",
+    response_model=list[DocumentExtractionResponse],
+)
+def get_document_extractions(
+    document_id: int,
+    db: Session = Depends(get_db),
+):
+    document = (
+        db.query(BidDocument)
+        .filter(BidDocument.id == document_id)
+        .first()
+    )
+
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail="Document not found",
+        )
+
+    extractions = (
+        db.query(DocumentExtraction)
+        .filter(DocumentExtraction.document_id == document_id)
+        .order_by(DocumentExtraction.created_at.desc())
+        .all()
+    )
+
+    return extractions

@@ -1,8 +1,6 @@
-from datetime import datetime
-
+from datetime import datetime, timezone
 from sqlalchemy import DateTime, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
-
 from app.core.database import Base
 
 
@@ -34,6 +32,6 @@ class TenderBid(Base):
 
     submitted_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
