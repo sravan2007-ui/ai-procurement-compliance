@@ -1,0 +1,19 @@
+services:
+  postgress:
+    image: pgvector/pgvector:pg16
+    container_name: procurement-postgress
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: procurement
+      POSTGRES_PASSWORD: procurement_password
+      POSTGRES_DB: procurement_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
