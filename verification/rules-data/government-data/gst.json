@@ -1,0 +1,32 @@
+{
+  "37ABCDE1234F1Z5": {
+    "gstin": "37ABCDE1234F1Z5",
+    "legal_name": "ABC Technologies Pvt Ltd",
+    "trade_name": "ABC Tech",
+    "status": "ACTIVE",
+    "registration_date": "2020-04-10",
+    "business_type": "Private Limited Company",
+    "return_filing_status": "COMPLIANT",
+    "principal_place_of_business": "Hyderabad, Telangana"
+  },
+  "29XYZAB5678C1Z9": {
+    "gstin": "29XYZAB5678C1Z9",
+    "legal_name": "XYZ Enterprises",
+    "trade_name": "XYZ Traders",
+    "status": "INACTIVE",
+    "registration_date": "2018-01-15",
+    "business_type": "Partnership",
+    "return_filing_status": "NON_COMPLIANT",
+    "principal_place_of_business": "Bengaluru, Karnataka"
+  },
+  "36AAACB1234F1Z5": {
+    "gstin": "36AAACB1234F1Z5",
+    "legal_name": "Bharat Dynamic Systems Pvt Ltd",
+    "trade_name": "Bharat Dynamic Systems",
+    "status": "ACTIVE",
+    "registration_date": "2019-06-12",
+    "business_type": "Private Limited Company",
+    "return_filing_status": "COMPLIANT",
+    "principal_place_of_business": "Plot 42, IDA Mallapur, Hyderabad, Telangana, 500076"
+  }
+}

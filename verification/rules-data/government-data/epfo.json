@@ -1,0 +1,16 @@
+{
+  "EPFO12345": {
+    "establishment_id": "EPFO12345",
+    "establishment_name": "ABC Technologies Pvt Ltd",
+    "status": "ACTIVE",
+    "contribution_status": "COMPLIANT",
+    "last_compliant_period": "2026-07"
+  },
+  "APHYD0012345000": {
+    "establishment_id": "APHYD0012345000",
+    "establishment_name": "Bharat Dynamic Systems Pvt Ltd",
+    "contribution_status": "COMPLIANT",
+    "status": "ACTIVE",
+    "last_compliant_period": "2026-07"
+  }
+}
