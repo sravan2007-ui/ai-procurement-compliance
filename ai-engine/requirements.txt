@@ -1,0 +1,11 @@
+fastapi
+langgraph
+uvicorn
+pydantic
+pydantic-settings
+google-genai
+python-dotenv
+pytest
+pymupdf
+pytesseract
+Pillow
