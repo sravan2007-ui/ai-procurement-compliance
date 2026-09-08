@@ -1,0 +1,22 @@
+{
+  "weights": {
+    "GST": 20,
+    "PAN": 15,
+    "UDYAM": 15,
+    "EPFO": 10,
+    "ESIC": 10,
+    "INCOME_TAX": 10,
+    "STARTUP_INDIA": 5,
+    "LOCAL_CONTENT": 15,
+    "BLACKLIST": 15
+  },
+  "risk_thresholds": {
+    "LOW": 85.0,
+    "MEDIUM": 65.0,
+    "HIGH": 40.0
+  },
+  "mandatory_checks": [
+    "BLACKLIST",
+    "LOCAL_CONTENT"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "ABCDE1234F": {
+    "pan_number": "ABCDE1234F",
+    "legal_name": "ABC Technologies Pvt Ltd",
+    "status": "VALID"
+  },
+  "XYZAB5678C": {
+    "pan_number": "XYZAB5678C",
+    "legal_name": "XYZ Enterprises",
+    "status": "VALID"
+  },
+  "AAACB1234F": {
+    "pan_number": "AAACB1234F",
+    "legal_name": "Bharat Dynamic Systems Pvt Ltd",
+    "status": "VALID"
+}
+}

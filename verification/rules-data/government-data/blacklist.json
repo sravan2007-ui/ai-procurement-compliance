@@ -1,0 +1,18 @@
+[
+  {
+    "entity_name": "XYZ Enterprises",
+    "pan_number": "XYZAB5678C",
+    "gstin": "29XYZAB5678C1Z9",
+    "blacklisted": true,
+    "reason": "Fraudulent procurement documents",
+    "valid_until": "2027-12-31"
+  },
+  {
+    "entity_name": "Fraudulent Supplies Ltd",
+    "pan_number": "AABBC1122D",
+    "gstin": null,
+    "blacklisted": true,
+    "reason": "Debarred by CVC for bid rigging",
+    "valid_until": "2028-03-31"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "ESIC12345": {
+    "employer_code": "ESIC12345",
+    "establishment_name": "ABC Technologies Pvt Ltd",
+    "employer_name": "ABC Technologies Pvt Ltd",
+    "registration_date": "2023-01-01",
+    "registration_status": "REGISTERED",
+    "contribution_status": "COMPLIANT",
+    "last_compliant_period": "2026-07"
+  }
+}

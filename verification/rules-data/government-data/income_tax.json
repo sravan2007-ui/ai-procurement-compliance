@@ -1,0 +1,11 @@
+{
+  "ABCDE1234F": {
+    "pan_number": "ABCDE1234F",
+    "taxpayer_name": "ABC Technologies Pvt Ltd",
+    "assessment_year": "2025-26",
+    "filing_status": "FILED",
+    "return_filing_date": "2025-11-20",
+    "gross_total_income": "15000000",
+    "taxable_income": "12500000"
+  }
+}

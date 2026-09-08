@@ -1,0 +1,14 @@
+{
+  "UDYAM-AP-00-0000000": {
+    "udyam_number": "UDYAM-AP-00-0000000",
+    "enterprise_name": "ABC Technologies Pvt Ltd",
+    "status": "ACTIVE",
+    "classification": "SMALL"
+  },
+  "UDYAM-TS-02-0012345": {
+    "udyam_number": "UDYAM-TS-02-0012345",
+    "enterprise_name": "Bharat Dynamic Systems Pvt Ltd",
+    "status": "ACTIVE",
+    "classification": "SMALL"
+  }
+}
