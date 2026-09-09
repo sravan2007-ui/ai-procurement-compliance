@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-
 from app.api.tenders import router as tender_router
 from app.api.bidders import router as bidder_router
 from app.api.bids import router as bid_router
 from app.api.documents import router as document_router
+from app.api.knowledge import router as knowledge_router
 
 app = FastAPI(
     title="AI Procurement Compliance Platform",
@@ -32,3 +32,4 @@ app.include_router(tender_router)
 app.include_router(bidder_router)
 app.include_router(bid_router)
 app.include_router(document_router)
+app.include_router(knowledge_router)

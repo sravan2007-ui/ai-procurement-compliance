@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict lszaVEIHRRbMbdjgp4IOouZPLSJxtdUguwkvnvstMZomk4E09dYoiuLXeCuJ3mv
+\restrict E2ysOTZ2GyY03qwNLvgaD8ayHvngm0pWz7bPxfr9bbBEOjVZBVROr5mJUY65EyW
 
 -- Dumped from database version 18.6 (Homebrew)
 -- Dumped by pg_dump version 18.6 (Homebrew)
@@ -222,6 +222,116 @@ ALTER SEQUENCE public.knowledge_documents_id_seq OWNED BY public.knowledge_docum
 
 
 --
+-- Name: registry_blacklist; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_blacklist (
+    pan_number character varying(10) NOT NULL,
+    gstin character varying(15),
+    entity_name character varying(255) NOT NULL,
+    blacklisted boolean,
+    reason character varying,
+    valid_until character varying(20)
+);
+
+
+--
+-- Name: registry_epfo; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_epfo (
+    establishment_id character varying(50) NOT NULL,
+    establishment_name character varying(255) NOT NULL,
+    contribution_status character varying(50) NOT NULL,
+    status character varying(50) NOT NULL,
+    last_compliant_period character varying(20)
+);
+
+
+--
+-- Name: registry_esic; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_esic (
+    employer_code character varying(50) NOT NULL,
+    establishment_name character varying(255) NOT NULL,
+    employer_name character varying(255),
+    registration_date character varying(20),
+    registration_status character varying(50) NOT NULL,
+    contribution_status character varying(50) NOT NULL,
+    last_compliant_period character varying(20)
+);
+
+
+--
+-- Name: registry_gst; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_gst (
+    gstin character varying(15) NOT NULL,
+    legal_name character varying(255) NOT NULL,
+    trade_name character varying(255),
+    status character varying(50) NOT NULL,
+    registration_date character varying(20),
+    business_type character varying(100),
+    return_filing_status character varying(50),
+    principal_place_of_business character varying
+);
+
+
+--
+-- Name: registry_income_tax; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_income_tax (
+    pan_number character varying(10) NOT NULL,
+    taxpayer_name character varying(255) NOT NULL,
+    assessment_year character varying(20) NOT NULL,
+    filing_status character varying(50) NOT NULL,
+    return_filing_date character varying(20),
+    gross_total_income character varying(50),
+    taxable_income character varying(50)
+);
+
+
+--
+-- Name: registry_pan; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_pan (
+    pan_number character varying(10) NOT NULL,
+    legal_name character varying(255) NOT NULL,
+    status character varying(50) NOT NULL
+);
+
+
+--
+-- Name: registry_startup_india; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_startup_india (
+    certificate_number character varying(50) NOT NULL,
+    startup_name character varying(255) NOT NULL,
+    recognition_date character varying(20),
+    entity_type character varying(100),
+    pan_number character varying(10) NOT NULL,
+    validity_status character varying(50) NOT NULL
+);
+
+
+--
+-- Name: registry_udyam; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registry_udyam (
+    udyam_number character varying(30) NOT NULL,
+    enterprise_name character varying(255) NOT NULL,
+    status character varying(50) NOT NULL,
+    classification character varying(50)
+);
+
+
+--
 -- Name: tender_bids; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -386,6 +496,70 @@ ALTER TABLE ONLY public.knowledge_documents
 
 
 --
+-- Name: registry_blacklist registry_blacklist_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_blacklist
+    ADD CONSTRAINT registry_blacklist_pkey PRIMARY KEY (pan_number);
+
+
+--
+-- Name: registry_epfo registry_epfo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_epfo
+    ADD CONSTRAINT registry_epfo_pkey PRIMARY KEY (establishment_id);
+
+
+--
+-- Name: registry_esic registry_esic_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_esic
+    ADD CONSTRAINT registry_esic_pkey PRIMARY KEY (employer_code);
+
+
+--
+-- Name: registry_gst registry_gst_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_gst
+    ADD CONSTRAINT registry_gst_pkey PRIMARY KEY (gstin);
+
+
+--
+-- Name: registry_income_tax registry_income_tax_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_income_tax
+    ADD CONSTRAINT registry_income_tax_pkey PRIMARY KEY (pan_number);
+
+
+--
+-- Name: registry_pan registry_pan_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_pan
+    ADD CONSTRAINT registry_pan_pkey PRIMARY KEY (pan_number);
+
+
+--
+-- Name: registry_startup_india registry_startup_india_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_startup_india
+    ADD CONSTRAINT registry_startup_india_pkey PRIMARY KEY (certificate_number);
+
+
+--
+-- Name: registry_udyam registry_udyam_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registry_udyam
+    ADD CONSTRAINT registry_udyam_pkey PRIMARY KEY (udyam_number);
+
+
+--
 -- Name: tender_bids tender_bids_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -451,6 +625,76 @@ CREATE INDEX ix_knowledge_chunks_document_id ON public.knowledge_chunks USING bt
 
 
 --
+-- Name: ix_registry_blacklist_gstin; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_blacklist_gstin ON public.registry_blacklist USING btree (gstin);
+
+
+--
+-- Name: ix_registry_blacklist_pan_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_blacklist_pan_number ON public.registry_blacklist USING btree (pan_number);
+
+
+--
+-- Name: ix_registry_epfo_establishment_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_epfo_establishment_id ON public.registry_epfo USING btree (establishment_id);
+
+
+--
+-- Name: ix_registry_esic_employer_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_esic_employer_code ON public.registry_esic USING btree (employer_code);
+
+
+--
+-- Name: ix_registry_gst_gstin; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_gst_gstin ON public.registry_gst USING btree (gstin);
+
+
+--
+-- Name: ix_registry_income_tax_pan_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_income_tax_pan_number ON public.registry_income_tax USING btree (pan_number);
+
+
+--
+-- Name: ix_registry_pan_pan_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_pan_pan_number ON public.registry_pan USING btree (pan_number);
+
+
+--
+-- Name: ix_registry_startup_india_certificate_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_startup_india_certificate_number ON public.registry_startup_india USING btree (certificate_number);
+
+
+--
+-- Name: ix_registry_startup_india_pan_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_startup_india_pan_number ON public.registry_startup_india USING btree (pan_number);
+
+
+--
+-- Name: ix_registry_udyam_udyam_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX ix_registry_udyam_udyam_number ON public.registry_udyam USING btree (udyam_number);
+
+
+--
 -- Name: ix_tender_bids_bidder_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -508,5 +752,5 @@ ALTER TABLE ONLY public.tender_bids
 -- PostgreSQL database dump complete
 --
 
-\unrestrict lszaVEIHRRbMbdjgp4IOouZPLSJxtdUguwkvnvstMZomk4E09dYoiuLXeCuJ3mv
+\unrestrict E2ysOTZ2GyY03qwNLvgaD8ayHvngm0pWz7bPxfr9bbBEOjVZBVROr5mJUY65EyW
 
