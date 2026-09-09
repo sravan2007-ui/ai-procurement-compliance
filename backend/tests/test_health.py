@@ -18,3 +18,9 @@ def test_health(client):
 
     assert response.status_code == 200
     assert response.json()["status"] == "healthy"
+
+def test_knowledge_health(client):
+    response = client.get("/api/knowledge/health")
+
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
